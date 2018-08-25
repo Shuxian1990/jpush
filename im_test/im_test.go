@@ -29,8 +29,8 @@ func Test_RegisterUser(t *testing.T) {
 // Test_RegisterAdmin 测试注册管理员
 func Test_RegisterAdmin(t *testing.T) {
 	ini := im.InitParams{
-		AppKey:       "3ac491b5b80577bb48503e12",
-		MasterSecret: "388c2a202c6368a9186e26db",
+		AppKey:       "",
+		MasterSecret: "",
 	}
 	c, err := im.Init(ini)
 	assert.Nil(t, err)
@@ -39,5 +39,23 @@ func Test_RegisterAdmin(t *testing.T) {
 
 	_, err = c.RegisterAdmin(user)
 	assert.Nil(t, err)
+
+}
+
+// Test_GetAdminsListByAppKey 测试管理员列表
+func Test_GetAdminsListByAppKey(t *testing.T) {
+	ini := im.InitParams{
+		AppKey:       "",
+		MasterSecret: "",
+	}
+	c, err := im.Init(ini)
+	assert.Nil(t, err)
+
+	rsp, err := c.GetAdminsListByAppKey(0, 5)
+	assert.Nil(t, err)
+
+	for i, v := range rsp.Users {
+		t.Logf("[Test_GetAdminsListByAppKey] 第%d个：%s", i, v.UserName)
+	}
 
 }
