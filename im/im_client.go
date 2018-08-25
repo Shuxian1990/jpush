@@ -1,14 +1,17 @@
 package im
 
 import (
+	"github.com/printfcoder/goutils/stringutils"
+	"net/http"
 	"time"
 )
 
 // Client 客户端接口
 type Client interface {
-	RegisterUsers(users []User) ([]RegisterUserRsp, error)
-	RegisterAdmin(admin User) (*RegisterUserRsp, error)
-	GetAdminsListByAppKey(start, count int) (*PageUserRsp, error)
+	RegisterUsers(users []User) ([]RegisterUserRsp, *Error)
+	RegisterAdmin(admin User) (*RegisterUserRsp, *Error)
+	GetAdminsListByAppKey(start, count int) (*PageUserRsp, *Error)
+	GetUser(userName string) (*User, *Error)
 }
 
 // InitParams 初始化参数
@@ -39,4 +42,10 @@ func initClient(parms InitParams) (c Client, err error) {
 	}
 
 	return single, nil
+}
+
+func (c *client) addAuthToHeader(header *http.Header) {
+	header.Add("Content-Type", "application/json")
+	sign := stringutils.ToBase64(c.AppKey + ":" + c.MasterSecret)
+	header.Add("Authorization", "Basic "+sign)
 }

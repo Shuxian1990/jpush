@@ -76,5 +76,19 @@ $ go get -u https://github.com/printfcoder/goutils/...
 
 ```
 
+### 获取指定用户
+
+```golang
+
+    // 构造用户账密
+    rsp, err := c.GetUser("asdfw3dfas8ad12")
+    if err != nil {
+      // ......
+    }
+
+    t.Logf("[Test_GetUser] 用户(asdfw3dfas8ad12)，创建时间：%s", rsp.CTime)
+
+```
+
 
 [RestAPI]: https://docs.jiguang.cn/jmessage/server/rest_api_im/

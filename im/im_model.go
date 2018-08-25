@@ -18,13 +18,21 @@ type User struct {
 // RegisterUserRsp 注册返回的结构
 type RegisterUserRsp struct {
 	UserName string `json:"username"`
-	Error    Error  `json:"error"`
 }
 
 // Error error
 type Error struct {
 	Code    int    `json:"code,omitempty"`
 	Message string `json:"message,omitempty"`
+}
+
+// ErrorRsp JPush返回的错误结构
+type ErrorRsp struct {
+	Error Error `json:"error,omitempty"`
+}
+
+func (e *Error) Error() string {
+	return e.Message
 }
 
 // PageUserRsp 用户分页结构
