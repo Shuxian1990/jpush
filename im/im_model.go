@@ -11,6 +11,8 @@ type User struct {
 	Region    string `json:"region,omitempty"`
 	Address   string `json:"address,omitempty"`
 	Extras    string `json:"extras,omitempty"`
+	MTime     string `json:"mtime,omitempty"`
+	CTime     string `json:"ctime,omitempty"`
 }
 
 // RegisterUserRsp 注册返回的结构
@@ -23,4 +25,13 @@ type RegisterUserRsp struct {
 type Error struct {
 	Code    int    `json:"code,omitempty"`
 	Message string `json:"message,omitempty"`
+}
+
+// PageUserRsp 用户分页结构
+type PageUserRsp struct {
+	Total int    `json:"total"`
+	Start int    `json:"start"`
+	Count int    `json:"count"`
+	Users []User `json:"users"`
+	Error Error  `json:"error"`
 }

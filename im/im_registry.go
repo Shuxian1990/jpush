@@ -21,11 +21,7 @@ func (c *client) RegisterUsers(users []User) (ret []RegisterUserRsp, err error) 
 		return nil, fmt.Errorf("[RegisterUsers] 创建 注册新人员 请求失败, err: %s", err)
 	}
 
-	req.Header.Add("Content-Type", "application/json")
-
-	sign := stringutils.ToBase64(c.AppKey + ":" + c.MasterSecret)
-
-	req.Header.Add("Authorization", "Basic "+sign)
+	c.addAuthToHeader(&req.Header)
 
 	// 发送请求
 	rsp, err := http.DefaultClient.Do(req)
@@ -63,11 +59,7 @@ func (c *client) RegisterAdmin(admin User) (ret *RegisterUserRsp, err error) {
 		return nil, fmt.Errorf("[RegisterAdmin] 创建 注册管理员 请求失败, err: %s", err)
 	}
 
-	req.Header.Add("Content-Type", "application/json")
-
-	sign := stringutils.ToBase64(c.AppKey + ":" + c.MasterSecret)
-
-	req.Header.Add("Authorization", "Basic "+sign)
+	c.addAuthToHeader(&req.Header)
 
 	// 发送请求
 	rsp, err := http.DefaultClient.Do(req)
@@ -99,4 +91,50 @@ func (c *client) RegisterAdmin(admin User) (ret *RegisterUserRsp, err error) {
 	}
 
 	return
+}
+
+// GetAdminsListByAppKey 获取管理员列表
+func (c *client) GetAdminsListByAppKey(start, count int) (ret *PageUserRsp, err error) {
+
+	// 创建请求
+	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.im.jpush.cn/v1/admins?start=%d&count=%d", start, count), nil)
+	if err != nil {
+		return nil, fmt.Errorf("[GetAdminsListByAppKey] 创建 获取管理员列表 请求失败, err: %s", err)
+	}
+
+	c.addAuthToHeader(&req.Header)
+
+	// 发送请求
+	rsp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("[GetAdminsListByAppKey] 发送 获取管理员列表 请求失败, err: %s", err)
+	}
+	defer rsp.Body.Close()
+
+	fmt.Printf(rsp.Status)
+
+	// 解析-body
+	rspBody, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("[GetAdminsListByAppKey] 发送 获取管理员列表 请求返回的body无法解析, err: %s", err)
+	}
+
+	// 解析-JSON
+	err = json.Unmarshal(rspBody, &ret)
+	if err != nil {
+		return nil, fmt.Errorf("[GetAdminsListByAppKey] 发送 获取管理员列表 请求返回的JSON无法解析, err: %s", err)
+	}
+
+	if ret.Error.Code != 0 {
+		return nil, fmt.Errorf("[GetAdminsListByAppKey] 发送 获取管理员列表 请求返回错误, err: %s", ret.Error.Message)
+	}
+
+	return
+
+}
+
+func (c *client) addAuthToHeader(header *http.Header) {
+	header.Add("Content-Type", "application/json")
+	sign := stringutils.ToBase64(c.AppKey + ":" + c.MasterSecret)
+	header.Add("Authorization", "Basic "+sign)
 }

@@ -8,6 +8,7 @@ import (
 type Client interface {
 	RegisterUsers(users []User) ([]RegisterUserRsp, error)
 	RegisterAdmin(admin User) (*RegisterUserRsp, error)
+	GetAdminsListByAppKey(start, count int) (*PageUserRsp, error)
 }
 
 // InitParams 初始化参数
