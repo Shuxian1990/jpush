@@ -15,6 +15,12 @@ type User struct {
 	CTime     string `json:"ctime,omitempty"`
 }
 
+// UserStat 用户状态
+type UserStat struct {
+	Login  bool `json:"login"`
+	Online bool `json:"online"`
+}
+
 // RegisterUserRsp 注册返回的结构
 type RegisterUserRsp struct {
 	UserName string `json:"username"`
