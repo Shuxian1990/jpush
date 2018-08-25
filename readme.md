@@ -36,6 +36,8 @@ $ go get -u https://github.com/printfcoder/goutils/...
 
 ```golang
 
+    // ...
+
     // 构造用户账密
     var users = []im.User{{UserName: "asdfw3dfas23sdf", Password: "asdfw3dfas23sdf2"}}
 
@@ -64,6 +66,8 @@ $ go get -u https://github.com/printfcoder/goutils/...
 
 ```golang
 
+    // ...
+
     // 构造用户账密
     rsp, err := c.GetAdminsListByAppKey(0, 5)
     if err != nil {
@@ -80,6 +84,8 @@ $ go get -u https://github.com/printfcoder/goutils/...
 
 ```golang
 
+    // ...
+
     // 构造用户账密
     rsp, err := c.GetUser("asdfw3dfas8ad12")
     if err != nil {
@@ -90,5 +96,22 @@ $ go get -u https://github.com/printfcoder/goutils/...
 
 ```
 
+### 更新指定用户
+
+```golang
+
+
+    // ...
+
+   	err = c.UpdateUser(im.User{UserName: "asdfw3dfa98ad12", Nickname: "小三"})
+   	assert.Nil(t, err)
+
+   	rsp, err := c.GetUser("asdfw3dfa98ad12")
+   	assert.Nil(t, err)
+
+   	t.Logf("[Test_GetUser] 用户(asdfw3dfas8ad12)，更新时间：%s，更新nickName: %s", rsp.CTime, rsp.Nickname)
+
+
+```
 
 [RestAPI]: https://docs.jiguang.cn/jmessage/server/rest_api_im/

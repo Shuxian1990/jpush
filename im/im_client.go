@@ -12,6 +12,7 @@ type Client interface {
 	RegisterAdmin(admin User) (*RegisterUserRsp, *Error)
 	GetAdminsListByAppKey(start, count int) (*PageUserRsp, *Error)
 	GetUser(userName string) (*User, *Error)
+	UpdateUser(user User) *Error
 }
 
 // InitParams 初始化参数
