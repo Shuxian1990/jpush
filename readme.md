@@ -26,5 +26,5 @@ Go
 
 
 
-[IM]:/im/
-[Push]:/Push/
+[IM]: /im/
+[Push]: /Push/
