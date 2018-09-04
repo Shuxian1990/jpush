@@ -86,7 +86,6 @@
 
 ```golang
 
-
     // ...
 
    	err = c.UpdateUser(im.User{UserName: "asdfw3dfa98ad12", Nickname: "小三"})
@@ -96,7 +95,6 @@
    	assert.Nil(t, err)
 
    	t.Logf("[Test_GetUser] 用户(asdfw3dfas8ad12)，更新时间：%s，更新nickName: %s", rsp.CTime, rsp.Nickname)
-
 
 ```
 
