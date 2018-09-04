@@ -1,5 +1,7 @@
 package im
 
+import "github.com/printfcoder/jpush/common"
+
 // User im人员
 type User struct {
 	UserName  string `json:"username"`
@@ -26,26 +28,16 @@ type RegisterUserRsp struct {
 	UserName string `json:"username"`
 }
 
-// Error error
-type Error struct {
-	Code    int    `json:"code,omitempty"`
-	Message string `json:"message,omitempty"`
-}
-
 // ErrorRsp JPush返回的错误结构
 type ErrorRsp struct {
-	Error Error `json:"error,omitempty"`
-}
-
-func (e *Error) Error() string {
-	return e.Message
+	Error common.Error `json:"error,omitempty"`
 }
 
 // PageUserRsp 用户分页结构
 type PageUserRsp struct {
-	Total int    `json:"total"`
-	Start int    `json:"start"`
-	Count int    `json:"count"`
-	Users []User `json:"users"`
-	Error Error  `json:"error"`
+	Total int          `json:"total"`
+	Start int          `json:"start"`
+	Count int          `json:"count"`
+	Users []User       `json:"users"`
+	Error common.Error `json:"error"`
 }

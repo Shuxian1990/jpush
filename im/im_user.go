@@ -3,10 +3,11 @@ package im
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/printfcoder/jpush/common"
 )
 
 // GetUser 获取用户
-func (c *client) GetUser(userName string) (ret *User, errN *Error) {
+func (c *client) GetUser(userName string) (ret *User, errN *common.Error) {
 
 	ret = &User{}
 	errN = c.get(fmt.Sprintf("https://api.im.jpush.cn/v1/users/%s", userName), "获取用户", ret)
@@ -15,7 +16,7 @@ func (c *client) GetUser(userName string) (ret *User, errN *Error) {
 }
 
 // UpdateUser 更新用户
-func (c *client) UpdateUser(user User) (errN *Error) {
+func (c *client) UpdateUser(user User) (errN *common.Error) {
 
 	data, _ := json.Marshal(user)
 	errN = c.putOrPost(fmt.Sprintf("https://api.im.jpush.cn/v1/users/%s", user.UserName), "更新用户", data, nil)
@@ -24,7 +25,7 @@ func (c *client) UpdateUser(user User) (errN *Error) {
 }
 
 // GetUserStat 获取用户状态
-func (c *client) GetUserStat(userName string) (ret *UserStat, errN *Error) {
+func (c *client) GetUserStat(userName string) (ret *UserStat, errN *common.Error) {
 
 	ret = &UserStat{}
 	errN = c.get(fmt.Sprintf("https://api.im.jpush.cn/v1/users/%s/userstat", userName), "获取用户状态", ret)

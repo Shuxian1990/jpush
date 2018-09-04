@@ -1,4 +1,4 @@
-package im
+package common
 
 var errMap = map[string]string{
 	"1":      "请求失败",

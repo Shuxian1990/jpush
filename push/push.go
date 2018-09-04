@@ -1,4 +1,4 @@
-package im
+package push
 
 import "github.com/printfcoder/jpush/common"
 

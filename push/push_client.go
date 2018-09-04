@@ -1,4 +1,4 @@
-package im
+package push
 
 import (
 	"bytes"
@@ -12,12 +12,7 @@ import (
 
 // Client 客户端接口
 type Client interface {
-	RegisterUsers(users []User) ([]RegisterUserRsp, *common.Error)
-	RegisterAdmin(admin User) (*RegisterUserRsp, *common.Error)
-	GetAdminsListByAppKey(start, count int) (*PageUserRsp, *common.Error)
-	GetUser(userName string) (*User, *common.Error)
-	UpdateUser(user User) *common.Error
-	GetUserStat(userName string) (*UserStat, *common.Error)
+	GetCID(count int) (*CIDList, *common.Error)
 }
 
 type client struct {
@@ -38,6 +33,16 @@ func initClient(params common.InitParams) (c Client, err error) {
 	}
 
 	return single, nil
+}
+
+// GetCID 获取CID 推送唯一标识符
+func (c *client) GetCID(count int) (ret *CIDList, errN *common.Error) {
+
+	ret = &CIDList{}
+	errN = c.get(fmt.Sprintf("https://api.jpush.cn/v3/push/cid?count=%d", count), "获取CID 推送唯一标识符", ret)
+
+	fmt.Printf("123")
+	return
 }
 
 func (c *client) get(url, funcMsg string, ret interface{}) (errN *common.Error) {
