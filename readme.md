@@ -27,4 +27,4 @@ $ go get -u https://github.com/printfcoder/goutils/...
 
 
 [IM]: /im/
-[Push]: /Push/
+[Push]: /push/
