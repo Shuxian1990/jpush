@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	AppKey       = "3ac491b5b80577bb48503e12"
-	MasterSecret = "388c2a202c6368a9186e26db"
+	AppKey       = ""
+	MasterSecret = ""
 )
 
 // Test_RegisterUser 测试注册用户

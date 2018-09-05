@@ -5,8 +5,8 @@ import "github.com/printfcoder/jpush/common"
 // MsgObj 消息结构 必填
 type MsgObj struct {
 	CID          string        `json:"cid,omitempty"`
-	Platform     []string      `json:"platform"`
-	Audience     Audience      `json:"audience"`
+	Platform     interface{}   `json:"platform"`
+	Audience     interface{}   `json:"audience"`
 	Notification *Notification `json:"notification,omitempty"`
 	Message      *Message      `json:"message,omitempty"`
 	SMSMessage   *SMSMessage   `json:"sms_message,omitempty"`
@@ -15,19 +15,19 @@ type MsgObj struct {
 
 // Audience 推送设备指定 必填
 type Audience struct {
-	Tag            []string `json:"tag"`
-	TagAnd         []string `json:"tag_and"`
-	TagNot         []string `json:"tag_not"`
-	Alias          []string `json:"alias"`
-	RegistrationID []string `json:"registration_id"`
-	Segment        string   `json:"segment"`
-	ABtTest        string   `json:"abtest"`
+	Tag            []string `json:"tag,omitempty"`
+	TagAnd         []string `json:"tag_and,omitempty"`
+	TagNot         []string `json:"tag_not,omitempty"`
+	Alias          []string `json:"alias,omitempty"`
+	RegistrationID []string `json:"registration_id,omitempty"`
+	Segment        string   `json:"segment,omitempty"`
+	ABtTest        string   `json:"abtest,omitempty"`
 }
 
 // Notification  通知内容体 可选 与message二选一
 type Notification struct {
-	Android NotificationAndroid `json:"android"`
-	IOS     NotificationIOS     `json:"ios"`
+	Android NotificationAndroid `json:"android,omitempty"`
+	IOS     NotificationIOS     `json:"ios,omitempty"`
 }
 
 // NotificationAndroid 内容结构平台 ANDROID
@@ -89,4 +89,10 @@ type ErrorRsp struct {
 // CIDList cid 列表
 type CIDList struct {
 	CIDList []string `json:"cidlist,omitempty"`
+}
+
+// Rsp JPush返回的结构
+type Rsp struct {
+	SendNo string `json:"sendno"`
+	MsgID  string `json:"msg_id"`
 }

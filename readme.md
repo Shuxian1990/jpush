@@ -14,17 +14,13 @@ $ go get -u github.com/printfcoder/jpush
 $ go get -u https://github.com/printfcoder/goutils/...
 ```
 
-
 ## IM 即时消息
 
 [Go][IM]
 
 ## Push 推送
 
-
 [Go][Push]
-
-
 
 [IM]: /im/
 [Push]: /push/
