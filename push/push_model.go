@@ -47,13 +47,13 @@ type NotificationAndroid struct {
 
 // NotificationIOS 内容结构平台 IOS
 type NotificationIOS struct {
-	Alert            string `json:"alert"`
-	Sound            string `json:"sound,omitempty"`
-	Badge            int    `json:"badge,omitempty"`
-	ContentAvailable bool   `json:"content-available,omitempty"`
-	MutableContent   bool   `json:"mutable-content,omitempty"`
-	Category         string `json:"style,omitempty"`
-	Extras           string `json:"extras,omitempty"`
+	Alert            string      `json:"alert"`
+	Sound            string      `json:"sound,omitempty"`
+	Badge            int         `json:"badge,omitempty"`
+	ContentAvailable bool        `json:"content-available,omitempty"`
+	MutableContent   bool        `json:"mutable-content,omitempty"`
+	Category         string      `json:"style,omitempty"`
+	Extras           interface{} `json:"extras,omitempty"`
 }
 
 // Message 消息结构

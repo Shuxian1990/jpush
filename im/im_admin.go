@@ -25,7 +25,7 @@ func (c *client) RegisterUsers(users []User) (ret []RegisterUserRsp, errN *commo
 
 		return nil, errN
 	}
-	c.addAuthToHeader(&req.Header)
+	c.AddAuthToHeader(&req.Header)
 
 	// 发送请求
 	rsp, err := http.DefaultClient.Do(req)
@@ -91,7 +91,7 @@ func (c *client) GetAdminsListByAppKey(start, count int) (ret *PageUserRsp, errN
 		return nil, errN
 	}
 
-	c.addAuthToHeader(&req.Header)
+	c.AddAuthToHeader(&req.Header)
 
 	// 发送请求
 	rsp, err := http.DefaultClient.Do(req)
