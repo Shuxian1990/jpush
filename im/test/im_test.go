@@ -105,8 +105,23 @@ func Test_GetUserStat(t *testing.T) {
 	c, err := im.Init(ini)
 	assert.Nil(t, err)
 
-	userStat, err := c.GetUserStat("asdfw3dfa98ad12")
+	userStat, err := c.GetUserStat("1034041484682203136")
 	assert.Nil(t, err)
 
 	t.Logf("[Test_GetUser] 用户(asdfw3dfas8ad12)，已经登录：%t，在线: %t", userStat.Login, userStat.Online)
+}
+
+// Test_GetUsersStat 测试获取用户状态 批量
+func Test_GetUsersStat(t *testing.T) {
+	ini := common.InitParams{
+		AppKey:       AppKey,
+		MasterSecret: MasterSecret,
+	}
+	c, err := im.Init(ini)
+	assert.Nil(t, err)
+
+	rsp, err := c.GetUsersStat([]string{"1034041484682203136"})
+	assert.Nil(t, err)
+
+	t.Logf("[Test_GetUser] 用户(asdfw3dfas8ad12)，已经登录：%t，在线: %t", rsp[0].Devices[0].Login, rsp[0].Devices[0].Online)
 }
