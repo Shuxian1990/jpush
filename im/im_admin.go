@@ -73,7 +73,7 @@ func (c *client) RegisterAdmin(admin User) (ret *RegisterUserRsp, errN *common.E
 	// 参数构造
 	data, _ := json.Marshal(admin)
 	ret = &RegisterUserRsp{}
-	c.putOrPost("https://api.im.jpush.cn/v1/admins/", "注册管理员", data, ret)
+	c.putOrPost("https://api.im.jpush.cn/v1/admins/", "put", "注册管理员", data, ret)
 	return
 }
 

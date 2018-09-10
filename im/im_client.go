@@ -18,6 +18,7 @@ type Client interface {
 	GetUser(userName string) (*User, *common.Error)
 	UpdateUser(user User) *common.Error
 	GetUserStat(userName string) (*UserStat, *common.Error)
+	GetUsersStat(userNames []string) ([]*UsersState, *common.Error)
 }
 
 type client struct {
@@ -107,10 +108,10 @@ func (c *client) get(url, funcMsg string, ret interface{}) (errN *common.Error) 
 	return
 }
 
-func (c *client) putOrPost(url, funcMsg string, body []byte, ret interface{}) (errN *common.Error) {
+func (c *client) putOrPost(url, method, funcMsg string, body []byte, ret interface{}) (errN *common.Error) {
 
 	// 创建请求
-	req, err := http.NewRequest("PUT", url, ioutil.NopCloser(bytes.NewReader(body)))
+	req, err := http.NewRequest(method, url, ioutil.NopCloser(bytes.NewReader(body)))
 	if err != nil {
 
 		errN = &common.Error{
@@ -134,20 +135,32 @@ func (c *client) putOrPost(url, funcMsg string, body []byte, ret interface{}) (e
 	}
 	defer rsp.Body.Close()
 
-	if stringutils.StartsWith(rsp.Status, "2") {
-		return nil
-	} else {
+	// 解析-body
+	rspBody, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
 
-		// 解析-body
-		rspBody, err := ioutil.ReadAll(rsp.Body)
+		errN = &common.Error{
+			Message: fmt.Errorf("[putOrPost] 发送 %s 请求返回的body无法解析, err: %s", funcMsg, err).Error(),
+			Code:    common.ErrReadRspFail,
+		}
+		return
+	}
+
+	if stringutils.StartsWith(rsp.Status, "2") {
+
+		// 解析-JSON
+		err = json.Unmarshal(rspBody, &ret)
 		if err != nil {
 
 			errN = &common.Error{
-				Message: fmt.Errorf("[putOrPost] 发送 %s 请求返回的body无法解析, err: %s", funcMsg, err).Error(),
-				Code:    common.ErrReadRspFail,
+				Message: fmt.Errorf("[putOrPost] 发送 %s 请求返回的JSON无法解析, err: %s", funcMsg, err).Error(),
+				Code:    common.ErrJSONUnmarshalFail,
 			}
-			return
+			return errN
 		}
+
+		return nil
+	} else {
 
 		// 解析-JSON
 		var errorRsp ErrorRsp

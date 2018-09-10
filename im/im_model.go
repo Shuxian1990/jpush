@@ -19,8 +19,15 @@ type User struct {
 
 // UserStat 用户状态
 type UserStat struct {
-	Login  bool `json:"login"`
-	Online bool `json:"online"`
+	Login    bool   `json:"login"`
+	Online   bool   `json:"online"`
+	Platform string `json:"platform"`
+}
+
+// UsersState 批量用户状态
+type UsersState struct {
+	UserName string     `json:"userName"`
+	Devices  []UserStat `json:"devices"`
 }
 
 // RegisterUserRsp 注册返回的结构
