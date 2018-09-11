@@ -40,6 +40,19 @@ type ErrorRsp struct {
 	Error common.Error `json:"error,omitempty"`
 }
 
+// BlacklistErrRsp 黑名单返回的错误结构
+type BlacklistErrRsp struct {
+	UserName string `json:"username,omitempty"`
+	ErrorRsp
+}
+
+// JustError 就是有错误，可能是请求本身有问题，可能是响应的参数错误，
+// 可能是数据查询出有不符合逻辑的（比如重复加入黑名单）
+type JustError struct {
+	BlacklistErrRsp []*BlacklistErrRsp
+	*ErrorRsp
+}
+
 // PageUserRsp 用户分页结构
 type PageUserRsp struct {
 	Total int          `json:"total"`

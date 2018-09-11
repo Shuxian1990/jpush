@@ -21,4 +21,7 @@ var (
 
 	// ErrErrorJSONUnmarshalFail errorJSON解析失败
 	ErrErrorJSONUnmarshalFail = 5
+
+	// ErrCustomErrorJSONUnmarshalFail  自定义errorJSON解析失败
+	ErrCustomErrorJSONUnmarshalFail = 6
 )

@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	AppKey       = ""
-	MasterSecret = ""
+	AppKey       = "3ac491b5b80577bb48503e12"
+	MasterSecret = "388c2a202c6368a9186e26db"
 )
 
 // Test_RegisterUser 测试注册用户
@@ -124,4 +124,31 @@ func Test_GetUsersStat(t *testing.T) {
 	assert.Nil(t, err)
 
 	t.Logf("[Test_GetUser] 用户(asdfw3dfas8ad12)，已经登录：%t，在线: %t", rsp[0].Devices[0].Login, rsp[0].Devices[0].Online)
+}
+
+// Test_ToBlackList 测试加入黑名单
+func Test_ToBlackList(t *testing.T) {
+	ini := common.InitParams{
+		AppKey:       AppKey,
+		MasterSecret: MasterSecret,
+	}
+	c, err := im.Init(ini)
+	assert.Nil(t, err)
+
+	errN := c.ToBlackList("1034041484682203136", []string{"1034049835633741824"})
+	assert.Nil(t, errN)
+}
+
+// Test_DeleteBlackList 测试移除黑名单
+func Test_DeleteBlackList(t *testing.T) {
+	ini := common.InitParams{
+		AppKey:       AppKey,
+		MasterSecret: MasterSecret,
+	}
+	c, err := im.Init(ini)
+	assert.Nil(t, err)
+
+	errN := c.DeleteBlackList("1034041484682203136", []string{"1034049835633741824"})
+	assert.Nil(t, errN)
+
 }

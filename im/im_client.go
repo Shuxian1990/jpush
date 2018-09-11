@@ -8,6 +8,7 @@ import (
 	"github.com/printfcoder/jpush/common"
 	"io/ioutil"
 	"net/http"
+	"reflect"
 )
 
 // Client 客户端接口
@@ -19,6 +20,8 @@ type Client interface {
 	UpdateUser(user User) *common.Error
 	GetUserStat(userName string) (*UserStat, *common.Error)
 	GetUsersStat(userNames []string) ([]*UsersState, *common.Error)
+	ToBlackList(userName string, blacklist []string) (errN *JustError)
+	DeleteBlackList(userName string, blacklist []string) (errN *JustError)
 }
 
 type client struct {
@@ -108,14 +111,14 @@ func (c *client) get(url, funcMsg string, ret interface{}) (errN *common.Error) 
 	return
 }
 
-func (c *client) putOrPost(url, method, funcMsg string, body []byte, ret interface{}) (errN *common.Error) {
+func (c *client) do(url, method, funcMsg string, body []byte, ret interface{}, rspErr interface{}) (errN *common.Error) {
 
 	// 创建请求
 	req, err := http.NewRequest(method, url, ioutil.NopCloser(bytes.NewReader(body)))
 	if err != nil {
 
 		errN = &common.Error{
-			Message: fmt.Errorf("[putOrPost] 创建 %s 请求失败, err: %s", funcMsg, err).Error(),
+			Message: fmt.Errorf("[do] 创建 %s 请求失败, err: %s", funcMsg, err).Error(),
 			Code:    common.ErrCreateReqFail,
 		}
 		return
@@ -128,7 +131,7 @@ func (c *client) putOrPost(url, method, funcMsg string, body []byte, ret interfa
 	if err != nil {
 
 		errN = &common.Error{
-			Message: fmt.Errorf("[putOrPost] 发送 %s 发送请求失败, err: %s", funcMsg, err).Error(),
+			Message: fmt.Errorf("[do] 发送 %s 发送请求失败, err: %s", funcMsg, err).Error(),
 			Code:    common.ErrSendReqFail,
 		}
 		return
@@ -140,7 +143,7 @@ func (c *client) putOrPost(url, method, funcMsg string, body []byte, ret interfa
 	if err != nil {
 
 		errN = &common.Error{
-			Message: fmt.Errorf("[putOrPost] 发送 %s 请求返回的body无法解析, err: %s", funcMsg, err).Error(),
+			Message: fmt.Errorf("[do] 发送 %s 请求返回的body无法解析, err: %s", funcMsg, err).Error(),
 			Code:    common.ErrReadRspFail,
 		}
 		return
@@ -148,32 +151,48 @@ func (c *client) putOrPost(url, method, funcMsg string, body []byte, ret interfa
 
 	if stringutils.StartsWith(rsp.Status, "2") {
 
-		// 解析-JSON
-		err = json.Unmarshal(rspBody, &ret)
-		if err != nil {
+		if ret != nil {
+			// 解析-JSON
+			err = json.Unmarshal(rspBody, &ret)
+			if err != nil {
 
-			errN = &common.Error{
-				Message: fmt.Errorf("[putOrPost] 发送 %s 请求返回的JSON无法解析, err: %s", funcMsg, err).Error(),
-				Code:    common.ErrJSONUnmarshalFail,
+				errN = &common.Error{
+					Message: fmt.Errorf("[do] 发送 %s 请求返回的JSON无法解析, err: %s", funcMsg, err).Error(),
+					Code:    common.ErrJSONUnmarshalFail,
+				}
+				return errN
 			}
-			return errN
 		}
 
 		return nil
 	} else {
 
-		// 解析-JSON
-		var errorRsp ErrorRsp
-		err = json.Unmarshal(rspBody, &errorRsp)
-		if err != nil {
-			errN = &common.Error{
-				Message: fmt.Errorf("[putOrPost] 发送 %s 请求返回的Error无法解析, err: %s", funcMsg, err).Error(),
-				Code:    common.ErrErrorJSONUnmarshalFail,
+		// 需要自定义错误类型的执行另外的解析错误逻辑
+		if rspErr == nil || (reflect.ValueOf(rspErr).Kind() == reflect.Ptr && reflect.ValueOf(rspErr).IsNil()) {
+			// 解析-JSON
+			var errorRsp ErrorRsp
+			err = json.Unmarshal(rspBody, &errorRsp)
+			if err != nil {
+				errN = &common.Error{
+					Message: fmt.Errorf("[do] 发送 %s 请求返回的Error无法解析, err: %s", funcMsg, err).Error(),
+					Code:    common.ErrErrorJSONUnmarshalFail,
+				}
+				return
 			}
-			return
+
+			return &errorRsp.Error
+		} else {
+
+			err = json.Unmarshal(rspBody, rspErr)
+			if err != nil {
+				errN = &common.Error{
+					Message: fmt.Errorf("[do] 发送 %s 请求返回的自定义Error无法解析, err: %s", funcMsg, err).Error(),
+					Code:    common.ErrCustomErrorJSONUnmarshalFail,
+				}
+				return
+			}
 		}
 
-		return &errorRsp.Error
 	}
 
 	return
