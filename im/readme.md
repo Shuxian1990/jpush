@@ -97,5 +97,33 @@
 
 ```
 
+### 获取用户状态
+
+```golang
+
+	rsp, err := c.GetUsersStat([]string{"1034041484682203136"})
+	assert.Nil(t, err)
+
+```
+
+### 加入黑名单
+
+```golang
+
+    errN := c.ToBlackList("1034041484682203136", []string{"1034049835633741824"})
+    assert.Nil(t, err)
+
+```
+
+### 移出黑名单
+
+```golang
+
+    // ...
+
+    errN := c.DeleteBlackList("1034041484682203136", []string{"1034049835633741824"})
+    assert.Nil(t, err)
+
+```
 
 [RestAPI]: https://docs.jiguang.cn/jmessage/server/rest_api_im/
