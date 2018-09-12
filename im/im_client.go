@@ -105,7 +105,7 @@ func (c *client) get(url, funcMsg string, ret interface{}) (errN *common.Error) 
 			return errN
 		}
 
-		return &errorRsp.Error
+		return errorRsp.Error
 	}
 
 	return
@@ -180,7 +180,7 @@ func (c *client) do(url, method, funcMsg string, body []byte, ret interface{}, r
 				return
 			}
 
-			return &errorRsp.Error
+			return errorRsp.Error
 		} else {
 
 			err = json.Unmarshal(rspBody, rspErr)

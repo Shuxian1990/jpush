@@ -37,7 +37,7 @@ type RegisterUserRsp struct {
 
 // ErrorRsp JPush返回的错误结构
 type ErrorRsp struct {
-	Error common.Error `json:"error,omitempty"`
+	Error *common.Error `json:"error,omitempty"`
 }
 
 // BlacklistErrRsp 黑名单返回的错误结构

@@ -51,7 +51,7 @@ func (c *client) ToBlackList(userName string, blacklist []string) (errN *JustErr
 	err := c.do(fmt.Sprintf("https://api.im.jpush.cn/v1/users/%s/blacklist", userName), "PUT", "添加黑名单", data, nil, &rspError)
 	if err != nil {
 		errN = &JustError{ErrorRsp: &ErrorRsp{}}
-		errN.ErrorRsp.Error = *err
+		errN.ErrorRsp.Error = err
 	}
 
 	if len(rspError) != 0 {
@@ -68,10 +68,12 @@ func (c *client) DeleteBlackList(userName string, blacklist []string) (errN *Jus
 	rspError := make([]*BlacklistErrRsp, 0)
 	err := c.do(fmt.Sprintf("https://api.im.jpush.cn/v1/users/%s/blacklist", userName), "DELETE", "移除黑名单", data, nil, &rspError)
 	if err != nil {
-		errN.ErrorRsp.Error = *err
+		errN = &JustError{ErrorRsp: &ErrorRsp{}}
+		errN.ErrorRsp.Error = err
 	}
 
 	if len(rspError) != 0 {
+		errN = &JustError{}
 		errN.BlacklistErrRsp = rspError
 	}
 
